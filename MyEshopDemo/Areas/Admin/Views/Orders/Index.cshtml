@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MyEshopDemo.Viewmodels.OrdersViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>User</th>
+        <th>Date</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>@Html.DisplayFor(modelItem => item.User.Email)</td>
+        <td>@Html.DisplayFor(modelItem => item.Order.DateCreated)</td>
+        <td>
+            @Html.ActionLink("Details", "Details", new {  id=item.Order.ID }) 
+        </td>
+    </tr>
+}
+
+</table>

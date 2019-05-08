@@ -1,0 +1,3 @@
+﻿@model MyEshopDemo.Viewmodels.CartViewModel
+<i class="fas fa-cart-plus"></i>
+Your cart: @Html.DisplayFor(model => model.Quantity) item(s) - &euro; @Html.DisplayFor(model => model.GrandTotal) @Html.ActionLink("Checkout", "Index")

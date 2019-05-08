@@ -1,0 +1,82 @@
+﻿@model MyEshopDemo.Viewmodels.HomeViewModel
+@{
+    ViewBag.Title = "Home Page";
+
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center">Κατηγορίες</h2>
+        <hr />
+        <div class="row">
+            @foreach (var category in Model.Categories)
+            {
+                <div class="col-md-3">
+                    <a href="/home/category/@category.CategoryId">
+                        <img src="Image/@Url.Content(category.Thumbnail)" class="product-thumb"/>
+                    </a>
+                    <div class="productTitle">
+                        <a href="/home/category/@category.CategoryId">
+                            <h4 class="text-center">@category.Name</h4>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center">Προτεινόμενα Προιόντα</h2>
+        <hr />
+        @foreach(var product in Model.Products)
+        {
+            <div class="col-md-3">
+                <a href="/home/product/@product.ID">
+                    <img src="~/Image/@Url.Content(product.Thumbnail)" class="product-thumb" />
+                </a>
+                <a href="/home/product/@product.ID">
+                    <h4 class="text-center">@product.Name</h4>
+                </a>
+                <h4>
+                    <span style="margin-left:50px;" class="pull-left">
+                        Τιμή:
+                    </span>
+                    <span class="pull-right" style="margin-right:50px;">
+                        @Html.DisplayFor(modelItem => product.Price)
+                    </span>
+                </h4>
+                <button class="addtocart btn btn-block js-cart" id="@product.ID">
+                    <i class="fa fa-cart-plus"></i>
+                    Στο καλάθι
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts 
+    {
+        <script>
+            $(document).ready(function ()
+            {
+                $("button.addtocart").click(function () {
+                    
+                    var url = "cart/AddToCartPartial";
+                    var ID = $(this).attr("id");
+                    $.get(url, { id: ID }, function (data)
+                    {
+                        $(".ajaxcart").html(data);
+                    }).done(function () {
+                        //toastr.success('Το προιόν προστέθηκε στο καλάθι');
+                        }).fail(function (e) {
+                            console.log(e.statusText);
+                            console.log("fail")
+
+                    });
+                });
+            });
+        </script>
+    }

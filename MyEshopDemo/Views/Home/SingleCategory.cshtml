@@ -1,0 +1,40 @@
+﻿@model MyEshopDemo.Viewmodels.SingleCategoryViewModel
+
+@{
+    ViewBag.Title = "Κατηγορία - " + @Html.DisplayFor(model=>Model.Category.Name);
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Html.DisplayFor(Model => Model.Category.Name)</h2>
+
+<div class="col-md-12">
+    @Html.Raw(Model.Category.Description)
+</div>
+<hr/>
+
+<div class="row">
+    @foreach(var product in Model.Products)
+    {
+    <div class="col-md-3">
+        <a href="/home/product/@product.ID">
+            <img src="~/Image/@Url.Content(product.Thumbnail)" class="product-thumb" />
+
+        </a>
+        <a href="/home/product/@product.ID">
+            <h4 class="text-center">
+                @Html.Raw(product.Name)
+            </h4>
+        </a>
+        <h4>
+            <span class="pull-left">Τιμή</span>
+            <span class="pull-right">&euro; @product.Price</span>
+        </h4>
+
+        <button class="btn btn-block addtocart" id="@product.ID">
+            <i class="fade fa-cart-plus"></i>
+            Στο καλάθι
+        </button>
+    </div>
+        
+    }
+</div>

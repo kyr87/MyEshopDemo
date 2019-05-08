@@ -1,0 +1,45 @@
+﻿@model MyEshopDemo.Viewmodels.OrderDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Order Details of @Html.DisplayFor(model => model.User.Email)</h2>
+
+<div>
+    <h4>OrderDetails</h4>
+    <hr />
+    <dl class="dl-horizontal"></dl>
+</div>
+<table class="table">
+    <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+    </tr>
+    @foreach (var item in Model.ProductsWithTheirQuantities)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Key.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.Key.Price)</td>
+            <td>@Html.DisplayFor(modelItem => item.Value)</td>
+            <td>@(item.Key.Price * item.Value) &euro;</td>
+        </tr>
+    }
+</table>
+<div class="row">
+    <div class="col-md-3 pull-right">
+        <b>Grand Total:</b> @Html.DisplayFor(model => model.GrandTotal) &euro;
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3 pull-right">
+        <b>Αποστολή πρός:</b> @Html.DisplayFor(model => model.User.Address)
+    </div>
+</div>
+<p>
+
+    @Html.ActionLink("Back to List", "Index")
+</p>

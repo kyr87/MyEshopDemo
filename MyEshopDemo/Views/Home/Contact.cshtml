@@ -1,0 +1,129 @@
+﻿@model MyEshopDemo.Models.Message
+@{
+    ViewBag.Title = "Contact";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+<div class="google-map">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12579.367665195578!2d23.7321257!3d37.9808184!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xd71dcf7d2b435255!2sPeopleCert!5e0!3m2!1sel!2sgr!4v1553791455517!5m2!1sel!2sgr" width="1000" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Στοιχεία Επικοινωνίας</h2>
+        <ul class="list-unstyled">
+            <li>
+                <i class="fas fa-map-marker-alt fa-2x" style="color:seagreen;"></i>
+                <span>
+                    Πανεπιστημίου 39, 1ος όροφος,
+                    Τ.Κ. 10564, Αθήνα
+                </span>
+            </li>
+            <li>
+                <i class="fas fa-phone fa-2x" style="color:seagreen;"></i>
+                <span>+30 210 37 29 070</span>
+            </li>
+            <li>
+                <i class="fas fa-envelope fa-2x" style="color:seagreen;"></i>
+                <span>hello@afdemp.org</span>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h2>Φόρμα Επικοινωνίας</h2>
+
+        <div class="success-message text-center">
+            <i id="spinner" class="fas fa-circle-o-notch fa-spin fa-5x" style="display:none;"></i>
+            <div id="suc-message" style="display:none;">
+                <img src="~/Image/success.svg" style="width:100px;" />
+                <p >Tο μήνυμα σας εχει σταλεί επιτυχώς.Θα επικονωνήσουμε μαζί σας το συντομότερο.</p>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("Create", "Messages", FormMethod.Post, htmlAttributes: new { @id = "message-form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Sender, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Sender, new { htmlAttributes = new { @class = "form-control", @id = "contactName" } })
+                        @Html.ValidationMessageFor(model => model.Sender, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @id = "contactEmail" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Mobile, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control", @id = "contactPhone" } })
+                        @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextArea("Content", new { rows = 10, columns = 40, @class = "form-control", @id = "message" })
+                        @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Send" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            var baseUrl = window.location.protocol + "//" + window.location.host + "/";
+
+            function msgSent() {
+                setTimeout(function ()
+                {
+                    $("#spinner").hide();
+                    $("#message-form").css('opacity', 0);
+                    $("#suc-message").show();
+                }, 2000);
+            }
+
+            $("#message-form").submit(function (e) {
+                e.preventDefault();
+                $("#message-form").css('opacity', '0.3');
+                $("#spinner").show();
+                $.post(baseUrl + "api/messages",
+                    {
+                        Sender: $("#contactName").val(),
+                        Email: $("#contactEmail").val(),
+                        Mobile: $("#contactPhone").val(),
+                        Content: $("#message").val(),
+                        IsRead: false,
+                    }).done(function (data) {
+                        msgSent();
+                    });
+            });
+        });
+    </script>
+    
+    }
